@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DashboardRecommenderOutput",
+  "description": "Output contract for the dashboard-recommender skill.",
+  "type": "object",
+  "required": [
+    "selected_dashboard_id",
+    "alternates",
+    "confidence",
+    "reason_codes",
+    "required_filters"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "selected_dashboard_id": {
+      "type": ["string", "null"],
+      "description": "The template_id of the best-fit dashboard, or null if the request is out of domain."
+    },
+    "alternates": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Other dashboard IDs that could reasonably serve this request, ordered by relevance."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Confidence score for the selection. 1.0 = exact match, 0.0 = no match."
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Machine-readable codes explaining the selection (e.g. 'keyword:fees', 'time_hint:ytd', 'fx_required', 'out_of_domain')."
+    },
+    "required_filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date_from": {
+          "type": ["string", "null"],
+          "description": "ISO date string or null."
+        },
+        "date_to": {
+          "type": ["string", "null"],
+          "description": "ISO date string or null."
+        },
+        "accountId": {
+          "type": ["string", "null"],
+          "description": "Account ID filter, or null."
+        },
+        "currency": {
+          "type": ["string", "null"],
+          "description": "ISO currency code filter, or null."
+        },
+        "type": {
+          "type": ["string", "null"],
+          "description": "Order type filter (BUY, SELL, DIVIDEND, FEE, INTEREST, LIABILITY), or null."
+        },
+        "symbol": {
+          "type": ["string", "null"],
+          "description": "Symbol/ticker filter, or null."
+        }
+      }
+    }
+  }
+}

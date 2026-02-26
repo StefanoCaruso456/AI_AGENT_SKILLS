@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FinancialDashboardBuilderOutput",
+  "description": "Output contract for the financial-dashboard-builder skill.",
+  "type": "object",
+  "required": ["title", "description", "tiles", "global_filters"],
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Human-readable dashboard title."
+    },
+    "description": {
+      "type": "string",
+      "description": "One-line summary of what this dashboard shows."
+    },
+    "error": {
+      "type": ["string", "null"],
+      "description": "Error code if the dashboard could not be fully built (e.g. 'no_schema', 'external_data_required')."
+    },
+    "tiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["tile_id", "title", "chart_type", "sql_ref", "x_field", "y_field", "formatting"],
+        "additionalProperties": false,
+        "properties": {
+          "tile_id": {
+            "type": "string",
+            "description": "Unique tile identifier within this dashboard."
+          },
+          "title": {
+            "type": "string",
+            "description": "Tile heading displayed in the UI."
+          },
+          "chart_type": {
+            "type": "string",
+            "enum": ["line", "bar", "pie", "table", "stacked_bar", "area"]
+          },
+          "sql_ref": {
+            "type": "string",
+            "description": "Pointer to the SQL query or dashboard_id that feeds this tile."
+          },
+          "x_field": {
+            "type": "string",
+            "description": "Column name or alias for the x-axis / primary dimension."
+          },
+          "y_field": {
+            "type": "string",
+            "description": "Column name or alias for the y-axis / measure."
+          },
+          "group_by": {
+            "type": ["string", "null"],
+            "description": "Column for series grouping, or null."
+          },
+          "formatting": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 6,
+                "description": "Decimal places for the y-axis values."
+              },
+              "prefix": {
+                "type": ["string", "null"],
+                "description": "Value prefix (e.g. '$', '€')."
+              },
+              "suffix": {
+                "type": ["string", "null"],
+                "description": "Value suffix (e.g. '%')."
+              },
+              "currency": {
+                "type": ["string", "null"],
+                "description": "ISO currency code for locale-aware formatting."
+              }
+            }
+          },
+          "sort": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "properties": {
+              "field": { "type": "string" },
+              "direction": { "type": "string", "enum": ["asc", "desc"] }
+            }
+          },
+          "limit": {
+            "type": ["integer", "null"],
+            "description": "Maximum rows to display in this tile."
+          }
+        }
+      }
+    },
+    "global_filters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "date_from": {
+          "type": ["string", "null"],
+          "description": "ISO date string for the start of the date range."
+        },
+        "date_to": {
+          "type": ["string", "null"],
+          "description": "ISO date string for the end of the date range."
+        },
+        "accountId": {
+          "type": ["string", "null"],
+          "description": "Filter to a specific account."
+        },
+        "currency": {
+          "type": ["string", "null"],
+          "description": "Filter to a specific currency."
+        },
+        "type": {
+          "type": ["string", "null"],
+          "description": "Order type filter (BUY, SELL, DIVIDEND, FEE, INTEREST, LIABILITY)."
+        },
+        "symbol": {
+          "type": ["string", "null"],
+          "description": "Filter to a specific symbol/ticker."
+        }
+      }
+    }
+  }
+}

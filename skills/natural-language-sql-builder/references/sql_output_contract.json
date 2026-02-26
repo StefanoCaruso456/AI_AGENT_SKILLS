@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NaturalLanguageSQLBuilderOutput",
+  "description": "Output contract for the natural-language-sql-builder skill.",
+  "type": "object",
+  "required": ["sql", "params", "intent"],
+  "additionalProperties": false,
+  "properties": {
+    "sql": {
+      "type": ["string", "null"],
+      "description": "A safe, parameterized Postgres SELECT query, or null if the request cannot be fulfilled."
+    },
+    "params": {
+      "type": "object",
+      "description": "Named parameters for the SQL query. Always includes userId.",
+      "properties": {
+        "userId": { "type": "string" }
+      },
+      "required": ["userId"],
+      "additionalProperties": true
+    },
+    "intent": {
+      "type": "object",
+      "required": [
+        "intent_type",
+        "dashboard_id",
+        "chart_type",
+        "x_field",
+        "y_field",
+        "group_by",
+        "time_granularity",
+        "currency",
+        "requires_external_data",
+        "missing_requirements"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "intent_type": {
+          "type": "string",
+          "enum": ["time_series", "aggregation", "comparison", "detail", "anomaly"]
+        },
+        "dashboard_id": {
+          "type": "string",
+          "description": "Matches a template in query_catalog.md or dashboard_templates.md."
+        },
+        "chart_type": {
+          "type": "string",
+          "enum": ["line", "bar", "pie", "table", "stacked_bar", "area"]
+        },
+        "x_field": {
+          "type": "string",
+          "description": "Column name or alias for the x-axis / primary dimension."
+        },
+        "y_field": {
+          "type": "string",
+          "description": "Column name or alias for the y-axis / measure."
+        },
+        "group_by": {
+          "type": ["string", "null"],
+          "description": "Column name for series grouping, or null if none."
+        },
+        "time_granularity": {
+          "type": ["string", "null"],
+          "enum": ["day", "week", "month", "quarter", "year", null]
+        },
+        "currency": {
+          "type": ["string", "null"],
+          "description": "ISO currency code if the query is scoped to one currency, else null."
+        },
+        "requires_external_data": {
+          "type": "boolean",
+          "description": "True if the request needs data not available in the schema (e.g. FX rates, live prices)."
+        },
+        "missing_requirements": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Human-readable list of gaps preventing query generation."
+        }
+      }
+    }
+  }
+}
